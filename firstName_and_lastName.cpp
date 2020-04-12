@@ -18,13 +18,13 @@ public:
             return "Incognito";
         }
         else if (first_name == "Incognito"){
-            return (last_name + " with unknown first name");
+            return last_name + " with unknown first name";
         }
         else if (last_name == "Incognito"){
-            return (first_name + " with unknown last name");
+            return first_name + " with unknown last name";
         }
         else{
-            return (first_name + " " + last_name);
+            return first_name + " " + last_name;
         }
     }
 private:
@@ -36,7 +36,7 @@ private:
             return "Incognito";
         }
         else
-            return ((--firstName.upper_bound(year))->second);
+            return (--firstName.upper_bound(year))->second;
     }
     string actualLastName(int year){
         if(lastName.empty()){
@@ -46,7 +46,7 @@ private:
             return "Incognito";
         }
         else
-            return ((--lastName.upper_bound(year))->second);
+            return (--lastName.upper_bound(year))->second;
     }
     map<int, string> lastName;
     map<int, string> firstName;
