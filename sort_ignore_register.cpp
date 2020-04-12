@@ -4,9 +4,9 @@
 
 using namespace std;
 
-std::string str_toupper(std::string s) {
-    std::transform(s.begin(), s.end(), s.begin(),
-                   [](unsigned char c){ return std::toupper(c); });
+string str_toupper(string s) {
+    transform(s.begin(), s.end(), s.begin(),
+                   [](unsigned char c){ return toupper(c); });
     return s;
 }
 
@@ -21,4 +21,3 @@ int main(){
         cout << i << " ";
     return 0;
 }
-//[](int x){ return (x >= 0);}
