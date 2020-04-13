@@ -151,5 +151,3 @@ private:
     map<int, string> lastName;
     map<int, string> firstName;
 };
-
-int main(){ return 0;}
