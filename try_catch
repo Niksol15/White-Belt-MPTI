@@ -1,0 +1,105 @@
+#include <iostream>
+#include <cmath>
+#include <algorithm>
+#include <exception>
+#include <stdexcept>
+using namespace std;
+
+class Rational {
+public:
+    Rational(): _numerator(0), _denominator(1) {}
+
+    Rational(int numerator, int denominator) {
+        if(denominator == 0)
+            throw invalid_argument("denominator");
+        if(numerator == 0){
+            _numerator = 0;
+            _denominator = 1;
+        } else {
+            if(denominator < 0){
+                numerator *= -1;
+                denominator *= -1;
+            }
+            int flag = numerator/abs(numerator);
+            numerator = abs(numerator);
+            int gcd = __gcd(numerator, denominator);
+            _numerator = flag * numerator / gcd;
+            _denominator = denominator / gcd;
+        }
+    }
+    int Numerator() const {
+        return _numerator;
+    }
+
+    int Denominator() const {
+        return _denominator;
+    }
+
+private:
+    int _numerator;
+    int _denominator;
+};
+
+bool operator==(const Rational& lhs, const Rational& rhs){
+    return lhs.Numerator() == rhs.Numerator() && lhs.Denominator() == rhs.Denominator();
+}
+
+bool operator>(const Rational& lhs, const Rational& rhs){
+    return static_cast<double>(lhs.Numerator())/lhs.Denominator() >
+        static_cast<double>(rhs.Numerator())/rhs.Denominator();
+}
+bool operator<(const Rational& lhs, const Rational& rhs){
+    return static_cast<double>(lhs.Numerator())/lhs.Denominator() <
+           static_cast<double>(rhs.Numerator())/rhs.Denominator();
+}
+Rational operator+(const Rational& lhs, const Rational& rhs){
+    return Rational(lhs.Numerator() * rhs.Denominator() + rhs.Numerator()* lhs.Denominator(),
+            lhs.Denominator() * rhs.Denominator());
+}
+
+Rational operator-(const Rational& lhs, const Rational& rhs){
+    return Rational(lhs.Numerator() * rhs.Denominator() - rhs.Numerator() * lhs.Denominator(),
+            lhs.Denominator() * rhs.Denominator());
+}
+
+Rational operator*(const Rational& lhs, const Rational& rhs){
+    return Rational(lhs.Numerator() * rhs.Numerator() ,
+                    lhs.Denominator() * rhs.Denominator());
+}
+
+Rational operator/(const Rational& lhs, const Rational& rhs){
+    if(rhs.Numerator() == 0)
+        throw domain_error("rhs");
+    return Rational(lhs.Numerator() * rhs.Denominator() ,
+                    lhs.Denominator() * rhs.Numerator());
+}
+
+istream& operator>>(istream& stream, Rational& fraction){
+    int numerator, denominator;
+    if(stream >> numerator && stream.ignore(1) && stream >> denominator)
+        fraction = Rational(numerator, denominator);
+    return stream;
+}
+ostream& operator<<(ostream& stream, const Rational& fraction){
+    if(stream)
+        stream << fraction.Numerator() << '/' << fraction.Denominator();
+    return stream;
+}
+int main() {
+    try {
+        Rational r(1, 0);
+        cout << "Doesn't throw in case of zero denominator" << endl;
+        return 1;
+    } catch (invalid_argument&) {
+    }
+
+    try {
+        auto x = Rational(1, 2) / Rational(0, 1);
+        cout << "Doesn't throw in case of division by zero" << endl;
+        return 2;
+    } catch (domain_error&) {
+    }
+
+    cout << "OK" << endl;
+    return 0;
+}
